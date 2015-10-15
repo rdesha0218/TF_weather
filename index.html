@@ -1,104 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<title>Thinkful API App</title>
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript">
-/*
-var topAnswered = function(tags) {
-	
-	// the parameters we need to pass in our request to StackOverflow's API
-	var request = {tagged: tags,
-								site: 'stackoverflow',
-								order: 'desc',
-								sort: 'creation'};
-	
-	var result = $.ajax({
-		url: "http://api.stackexchange.com/2.2/tags/" + request.tagged + "/top-answerers/all_time?site=stackoverflow",
-		data: request,
-		dataType: "jsonp",
-		type: "GET",
-		})
-	.done(function (result) {
-		var searchResults = showSearchResults(request.tagged, result.items.length);
-
-		$('.search-results').html(searchResults);
-
-		$.each(result.items, function (i, item) {
-			
-			var answerer = showAnswers(item);
-			$('.results').append(answerer);
-		});
-	})
-
-	.fail(function (jqXHR, error, errorThrown){
-		var errorElem = showError(error);
-		$('.search-results').append(errorElem);
-	});
-};	
-*/
-	</script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-	<script>
-		$(document).ready(function() {
-		var state_abr = "OR", city = "Beaverton";
-		  $.ajax({
-		  url : "http://api.wunderground.com/api/4d218aa09b58e993/geolookup/conditions/q/" + state_abr + "/" + city + ".json",
-		  dataType : "jsonp",
-
-		  success : function(parsed_json) {
-		  var location = parsed_json['location']['city'];
-		  var temp_f = parsed_json['current_observation']['temp_f'];
-		  alert("Current temperature in " + location + " is: " + temp_f);
-		  }
-	  });
-	});
-	</script>
-	<style type="text/css">
+		<style type="text/css">
 
 	html {
 		font-family: 'Roboto', sans-serif;
-		background-color: #4682B4;
-			
+		background-color: #fff;
 	}
 
 	.title {
 		font-size: 40px;
-		color: #fff;
+		color: #4682B4;
+		margin-left: 30px;
 	}
-	
-	.input_area {
+
+	#query {
+		border: 2px solid #000;
+		margin: -65px 50px 0px 0px;
+		padding: 10px 60px;
 		float:right;
-		margin-top: -65px;
-		padding-right: 50px;
 	}
-
-	#search_input {
+	img#icon {
+		margin-right: auto;
+		margin-left: auto;
+		width: 100px;
+		height: 100px;
+	}
+	.location, .temp_f {
 		text-align: center;
-		border: 2px solid #000;
-		border-radius: 10px;
-		background-color: #fff;
-		height: 25px;
-		width: 300px;
-	}
-	.go {
-		border: 2px solid #000;
-		border-radius: 7px;
-		background-color: #fff;
-		padding: 5px 5px;
 	}
 
+	.location {
+		font-size: 50px;
+	}
+	#degree {
+		font-size: 25px;
+	}
+	.temp_f {
+		font-size: 40px;
+		margin-top: -10px;
+	}
 
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript">
+
+var str = "name,address,state,city";
+var arr = str.split(',');
+
+		$(document).ready(function() {
+			$('#search-term').submit(function(event) {
+			// get the value of the tags the user submitted
+			var user_input = $(this).find("input[name='location']").val();
+			input_split = user_input.split(',');
+			console.log(input_split);
+			console.log(input_split[0]);
+			console.log(input_split[1]);
+			var user_city = input_split[0];
+			var user_state_abr = input_split[1];
+			var temp_f, full_loc, city, state_abr, icon;
+			$.ajax({
+					url : "http://api.wunderground.com/api/4d218aa09b58e993/geolookup/conditions/q/" +
+					user_state_abr + "/" + user_city + ".json",
+					dataType: "jsonp",
+
+			success : function(parsed_json) {
+			city = parsed_json['location']['city'];
+			console.log("City: " + city); 
+			state_abr = parsed_json['location']['state'];
+			console.log("State: " + state_abr);
+			temp_f = parsed_json['current_observation']['temp_f'];
+			icon= parsed_json['current_observation']['icon_url'];
+			console.log("Temp: " + temp_f);
+			console.log("icon: " + icon);
+
+			
+			$('#search-results').append('<h1 class="location">' + city + ", " + state_abr + '</h1>').text();
+			$('#search-results').append('<img id="icon" src="' + icon + '">').text();
+			$('#search-results').append('<h1 class="temp_f">' + temp_f + '<span id="degree">&degF</span></h1>').text();
+			
+			}
+	  });
+	});
+	});
+
+	</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
 </head>
 <body>
 	<h1 class='title'>Thinkful Weather API App</h1>
-	<form class="input_area">
-			<input type="text" name="location" value="Location" id="search_input">
-			<button type="button" class="go">Go</button>
+	<form id="search-term" onsubmit="return false;">
+		<input type="text" placeholder='Location' name="location" id="query">
+	
 	</form>
-	<div class="results"></div>
+	<div id="search-results"></div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
