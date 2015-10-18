@@ -54,25 +54,32 @@ $(document).ready(function() {
   });
 
 }
-/*
+
 	 function forecast(city,state){
 	 	$.ajax({
 	 		url: "http://api.wunderground.com/api/4d218aa09b58e993/forecast/q/" +
 	 		user_state_abr + "/" + user_city + ".json",
 	 		dataType: "jsonp", 
 
-	 		success : function(parsed_json) {
-	 		//fore_icon = parsed_json['forecast']['forecastday']['icon_url'];
-	 		fore_title = parsed_json['forecast']['forecastday']['period':0]['title'];
-	 		fore_text = parsed_json['forecast']['forecastday']['period':0]['fcttext'];
 
+	 		success : function(data) {
+	 			console.log(data);
+	 		//fore_icon = data['forecast']['txt_forecast']['forecastday'][0]['icon_url'];
+	 		fore_title = data['forecast']['txt_forecast']['forecastday'][0]['title'];
+	 		fore_text = data['forecast']['txt_forecast']['forecastday'][0]['fcttext'];
 	 		//$('#forecast').append('<img id="icon" src="' + fore_icon + '">').text();
-	 		$('#forecast').append('<h2>' + fore_title + '</h2>').text();
-	 		$('#forecast').append('<h2>' + fore_text + '</h2>')
+
+	 		$('#forecast').append('<h1>Forecast</h1>').text();
+	 		for (var i = 0; i < 8; i++) {
+	 		fore_title = data['forecast']['txt_forecast']['forecastday'][i]['title'];
+	 		fore_text = data['forecast']['txt_forecast']['forecastday'][i]['fcttext'];
+	 		$('#forecast').append('<h2>Forecast for  ' + fore_title + ' is ' + fore_text + '.</h2>').text();
+	 		}
+	 		
 	 		}
 	 	});
 	 } 
-	*/
+	
 	$('#search-results').append('<h1 class="location">' + city + ", " + state_abr + '</h1>').text();
 	$('#search-results').append('<img id="icon" src="' + icon + '">').text();
 	$('#search-results').append('<h1 class="temp_f">' + temp_f + '<span id="degree">&degF</span></h1>').text();
@@ -80,7 +87,7 @@ $(document).ready(function() {
 	$('#search-results').append('<h2 class="pressure">Barometric Pressure: ' + pressure_in + ' in </h2>').text();
 	
 	settime(user_city, user_state_abr);
-	//forecast(user_city, user_state_abr);
+	forecast(user_city, user_state_abr);
 	}
 });
 });
