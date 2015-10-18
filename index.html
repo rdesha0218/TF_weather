@@ -56,6 +56,7 @@ $(document).ready(function() {
 }
 
 	 function forecast(city,state){
+	 	$('#forecast').empty();
 	 	$.ajax({
 	 		url: "http://api.wunderground.com/api/4d218aa09b58e993/forecast/q/" +
 	 		user_state_abr + "/" + user_city + ".json",
