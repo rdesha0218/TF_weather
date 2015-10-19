@@ -34,9 +34,10 @@ $(document).ready(function() {
 			dataType : "jsonp",
 
 		success : function(parsed_json) {
+			console.log(parsed_json);
 		rise_hour = parsed_json['sun_phase']['sunrise']['hour'];
 		rise_minute = parsed_json['sun_phase']['sunrise']['minute'];
-		set_hour = parsed_json['sun_phase']['sunset']['minute'];
+		set_hour = parsed_json['sun_phase']['sunset']['hour'];
 		set_minute = parsed_json['sun_phase']['sunset']['minute'];
 
 		//$('#search-results').append('<h2 class="suntime">Sunrise: ' + rise_hour + ":" + rise_minute + "AM").text();
@@ -58,7 +59,7 @@ $(document).ready(function() {
 
 
 	 		success : function(data) {
-	 			console.log(data);
+	 			//console.log(data);
 	 		//fore_icon = data['forecast']['txt_forecast']['forecastday'][0]['icon_url'];
 	 		//fore_title = data['forecast']['txt_forecast']['forecastday'][0]['title'];
 	 		//fore_text = data['forecast']['txt_forecast']['forecastday'][0]['fcttext'];
