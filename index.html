@@ -4,102 +4,14 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<title>Thinkful API App</title>
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="style.css"/> 
+	<link rel="stylesheet" href="style.css"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script>
-$(document).ready(function() {
-	$('#search-term').submit(function(event) {
-		$('#search-results').empty();
-		$('.footer').show();
-
-	// get the value of the tags the user submitted
-	var user_input = $(this).find("input[name='location']").val();
-	input_split = user_input.split(',');
-	console.log(input_split);
-	console.log(input_split[0]);
-	console.log(input_split[1]);
-	var user_city = input_split[0];
-	var user_state_abr = input_split[1];
-	var temp_f, full_loc, city, state_abr, icon, humidity, pressure_trend, pressure_in, rise_hour, rise_minute, set_hour, set_minute, fore_icon, fore_title, fore_text, radar;
-
-	$.ajax({
-			url : "http://api.wunderground.com/api/4d218aa09b58e993/geolookup/conditions/q/" +
-			user_state_abr + "/" + user_city + ".json",
-			dataType: "jsonp",
-
-		success : function(parsed_json) {
-		city = parsed_json['location']['city'];
-		state_abr = parsed_json['location']['state'];
-		temp_f = parsed_json['current_observation']['temp_f'];
-		icon = parsed_json['current_observation']['icon_url'];
-		humidity = parsed_json['current_observation']['relative_humidity'];
-		pressure_in = parsed_json['current_observation']['pressure_in'];
-		radar = "http://api.wunderground.com/api/4d218aa09b58e993/radar/q/" +  user_state_abr +  "/" + user_city + ".gif?width=280&height=280&newmaps=1";
-
-	function settime(city, state) {
-		$.ajax({
-			url: "http://api.wunderground.com/api/4d218aa09b58e993/astronomy/q/" + 
-			user_state_abr + "/" + user_city + ".json", 
-			dataType : "jsonp",
-
-		success : function(parsed_json) {
-		rise_hour = parsed_json['sun_phase']['sunrise']['hour'];
-		rise_minute = parsed_json['sun_phase']['sunrise']['minute'];
-		set_hour = parsed_json['sun_phase']['sunset']['minute'];
-		set_minute = parsed_json['sun_phase']['sunset']['minute'];
-
-		$('#search-results').append('<h2>Sunrise: ' + rise_hour + ":" + rise_minute + "AM").text();
-		$('#search-results').append('<h2>Sunrise: ' + (set_hour - 12) + ":" + set_minute + "PM").text();
-		}
-  });
-
-}
-
-	 function forecast(city,state){
-	 	$('#forecast').empty();
-	 	$.ajax({
-	 		url: "http://api.wunderground.com/api/4d218aa09b58e993/forecast/q/" +
-	 		user_state_abr + "/" + user_city + ".json",
-	 		dataType: "jsonp", 
-
-
-	 		success : function(data) {
-	 			console.log(data);
-	 		//fore_icon = data['forecast']['txt_forecast']['forecastday'][0]['icon_url'];
-	 		fore_title = data['forecast']['txt_forecast']['forecastday'][0]['title'];
-	 		fore_text = data['forecast']['txt_forecast']['forecastday'][0]['fcttext'];
-	 		//$('#forecast').append('<img id="icon" src="' + fore_icon + '">').text();
-
-	 		$('#forecast').append('<h1>Forecast</h1>').text();
-	 		for (var i = 0; i < 8; i++) {
-	 		fore_title = data['forecast']['txt_forecast']['forecastday'][i]['title'];
-	 		fore_text = data['forecast']['txt_forecast']['forecastday'][i]['fcttext'];
-	 		$('#forecast').append('<h2>Forecast for  ' + fore_title + ' is ' + fore_text + '</h2>').text();
-	 		}
-	 		
-	 		}
-	 	});
-	 } 
-	
-	$('#search-results').append('<h1 class="location">' + city + ", " + state_abr + '</h1>').text();
-	$('#search-results').append('<img id="icon" src="' + icon + '">').text();
-	$('#search-results').append('<h1 class="temp_f">' + temp_f + '<span id="degree">&degF</span></h1>').text();
-	$('#search-results').append('<h2 class="humidity">Relative Humidity: ' + humidity + '</h2>').text();
-	$('#search-results').append('<h2 class="pressure">Barometric Pressure: ' + pressure_in + ' in </h2>').text();
-	
-	settime(user_city, user_state_abr);
-	forecast(user_city, user_state_abr);
-	}
-});
-});
-});
-
-	</script>
+	<script src="script.js"></script>
 </head>
 <body>
 	<h1 class='title'>Thinkful Weather API App</h1>
 	<form id="search-term" onsubmit="return false;">
-		<input type="text" placeholder='Location (City, State)' name="location" id="query">
+		<input type="text" placeholder='Location (City, State)' name="location" id="query" size="50">
 	</form>
 	<div id="search-results"></div>
 	<div id="forecast"></div>
